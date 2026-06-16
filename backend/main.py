@@ -13,7 +13,7 @@ app = FastAPI()
 # Enable CORS for the local React app
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -152,7 +152,7 @@ def get_analysis(payload: dict):
         if df is None or header not in df.columns: return None, 0
         f_df = apply_filters(df)
         
-        counts = f_df.groupby(header)['ACCT_ID'].count().reset_index(name='Count')
+        counts = f_df.groupby(header).size().reset_index(name='Count')
         counts = counts.sort_values(by='Count', ascending=True)
         total = counts['Count'].sum()
         
